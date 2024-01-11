@@ -1,4 +1,3 @@
-version: '3'
 services:
   postgres:
     image: postgres:latest
@@ -9,10 +8,14 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./house_prices.csv:/house_prices.csv
  
   spark-master:
     image:  bitnami/spark:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       -POSTGRES_HOST: postgres
       -POSTGRES_PORT: 5432
